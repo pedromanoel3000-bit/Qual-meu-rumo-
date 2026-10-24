@@ -48,6 +48,10 @@ Atenção: se mudar a quantidade de itens em `ITEMS`, `PAIRS` ou `REFL`, as resp
 
 ## Outros arquivos
 
+- `sobre.html`, `privacidade.html` e `termos.html`: o que o teste é e não é, política de privacidade (LGPD) e termos de uso, com o estilo em `paginas.css`. Os links ficam no rodapé de todas as telas do teste. A página de privacidade tem um botão que apaga a chave `rumo-v1` do aparelho.
+  - Elas descrevem o site como ele é hoje: sem cookies, sem contador de visitas e sem chamar serviços de fora. Se isso mudar (contador, pagamento, formulário), atualize a privacidade **antes** de publicar e mude a data "Atualizado em" das páginas alteradas.
+  - O número de caminhos (51) está escrito à mão em `sobre.html`. Se mudar `PATHS`, atualize lá também.
+  - O e-mail de contato aparece em `privacidade.html` e `termos.html`.
 - `og.png` (1200×630): prévia de links no WhatsApp e nas redes. O código-fonte está em `tools/og.html`. Para gerar de novo, tire uma captura de tela de 1200×630 desse arquivo, por exemplo com o Playwright.
 - `favicon.svg`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png` e `site.webmanifest`: ícones e instalação na tela inicial.
 - `.nojekyll`: faz o GitHub Pages servir os arquivos como estão.

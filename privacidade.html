@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Política de privacidade · Qual é o meu rumo?</title>
+<meta name="description" content="Suas respostas ficam só no seu aparelho. Veja o que é guardado, como apagar e seus direitos pela LGPD.">
+<link rel="canonical" href="https://pedromanoel3000-bit.github.io/Qual-meu-rumo-/privacidade.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#EDF2EC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0D1613" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="paginas.css">
+</head>
+<body>
+<main class="page">
+  <a class="back" href="./">← Voltar ao teste</a>
+  <span class="brand">Qual é o meu rumo?</span>
+  <h1>Política de privacidade</h1>
+  <p class="upd">Atualizado em 24 de outubro de 2026</p>
+
+  <section class="box key">
+    <h2>Resumo</h2>
+    <ul>
+      <li>Suas respostas ficam só no seu aparelho. Nós não recebemos, não vemos e não guardamos nada do que você responde.</li>
+      <li>O site não usa cookies, contador de visitas, anúncios nem ferramentas de rastreamento.</li>
+      <li>Você pode apagar tudo a qualquer momento, no botão do fim desta página.</li>
+    </ul>
+  </section>
+
+  <section class="box">
+    <h2>O que fica guardado no seu aparelho</h2>
+    <p>Para você poder parar e continuar depois, o navegador guarda no próprio aparelho (no armazenamento local, chamado localStorage):</p>
+    <ul>
+      <li>o nome ou apelido que você digitar;</li>
+      <li>suas respostas das 4 etapas, inclusive as reflexões;</li>
+      <li>os caminhos escolhidos para testar, as tarefas marcadas no plano de 30 dias e as notas do placar.</li>
+    </ul>
+    <p>Esses dados não saem do aparelho, a não ser que você decida compartilhar. Quem usar o mesmo aparelho e o mesmo navegador consegue ver o resultado.</p>
+    <p>Todos os arquivos do site, inclusive as fontes, vêm do próprio site. Nenhum outro serviço é chamado enquanto você faz o teste.</p>
+  </section>
+
+  <section class="box">
+    <h2>Quando você compartilha</h2>
+    <p>Os botões de WhatsApp, copiar resumo, compartilhar imagem e PDF só montam o conteúdo no seu aparelho. Quando você envia para alguém ou para outro serviço (WhatsApp, Instagram, um assistente de inteligência artificial etc.), passam a valer as regras de privacidade desse serviço.</p>
+    <ul>
+      <li>A <b>imagem</b> mostra o nome que você digitou (se houver), seu código, seu perfil e 3 caminhos. Nunca mostra as reflexões nem as respostas sobre sua realidade.</li>
+      <li>O <b>texto do WhatsApp</b> e o <b>resumo copiado</b> incluem as respostas sobre sua realidade e suas reflexões. Confira antes de enviar.</li>
+    </ul>
+  </section>
+
+  <section class="box">
+    <h2>Hospedagem</h2>
+    <p>O site fica hospedado no GitHub Pages, serviço da GitHub, Inc., empresa dos Estados Unidos. Como acontece com qualquer site, o GitHub registra dados técnicos de quem acessa, como o endereço IP, por motivos de segurança. Nós não temos acesso a esses registros. Saiba mais na <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">declaração de privacidade do GitHub</a>.</p>
+  </section>
+
+  <section class="box">
+    <h2>Seus direitos pela LGPD</h2>
+    <p>A Lei Geral de Proteção de Dados (Lei 13.709/2018) garante seus direitos sobre seus dados pessoais. Como suas respostas não chegam até nós, não temos dados seus para mostrar, corrigir ou apagar: tudo fica sob seu controle, no seu aparelho. Se tiver dúvidas, fale com a gente pelo contato abaixo.</p>
+  </section>
+
+  <section class="box">
+    <h2>Mudanças nesta política</h2>
+    <p>Se um dia o site passar a coletar algum dado (por exemplo, para contar visitas ou vender um produto), esta página será atualizada antes e o site vai avisar.</p>
+  </section>
+
+  <section class="box">
+    <h2>Contato</h2>
+    <p>O site é mantido por Pedro. Para dúvidas sobre privacidade, escreva para <a href="mailto:CONTATO_EMAIL">CONTATO_EMAIL</a>.</p>
+  </section>
+
+  <section class="box" id="apagar-dados">
+    <h2>Apagar minhas respostas deste aparelho</h2>
+    <p>Apaga o nome, as respostas, o plano e o placar guardados neste navegador. Não dá para desfazer. Limpar os dados do site nas configurações do navegador tem o mesmo efeito.</p>
+    <button class="btn" id="apagar" type="button">Apagar minhas respostas deste aparelho</button>
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+  </section>
+
+  <nav class="foot" aria-label="Outras páginas">
+    <a href="./">Fazer o teste</a>
+    <a href="sobre.html">Sobre o teste</a>
+    <a href="termos.html">Termos de uso</a>
+  </nav>
+</main>
+<script>
+"use strict";
+(function(){
+  const KEY = "rumo-v1", LABEL = "Apagar minhas respostas deste aparelho";
+  const btn = document.getElementById("apagar"), st = document.getElementById("status");
+  let has = false;
+  try{ has = localStorage.getItem(KEY) !== null; }catch(e){}
+  if(!has){ st.textContent = "Não há respostas salvas neste aparelho."; btn.disabled = true; return; }
+  st.textContent = "Há respostas salvas neste aparelho.";
+  let armed = false, timer;
+  btn.addEventListener("click", () => {
+    if(!armed){
+      armed = true; btn.textContent = "Toque de novo para apagar tudo";
+      timer = setTimeout(() => { armed = false; btn.textContent = LABEL; }, 4000);
+      return;
+    }
+    clearTimeout(timer);
+    try{ localStorage.removeItem(KEY); st.textContent = "Pronto. Suas respostas foram apagadas deste aparelho."; btn.textContent = "Respostas apagadas"; }
+    catch(e){ st.textContent = "Não foi possível apagar daqui. Limpe os dados do site nas configurações do navegador."; btn.textContent = LABEL; }
+    btn.disabled = true;
+  });
+})();
+</script>
+</body>
+</html>
