@@ -1,0 +1,24 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:BS;font-weight:800;src:url(../fonts/big-shoulders-800.woff2)}
+@font-face{font-family:AT;font-weight:400;src:url(../fonts/atkinson-400.woff2)}
+@font-face{font-family:AT;font-weight:700;src:url(../fonts/atkinson-700.woff2)}
+@font-face{font-family:PM;font-weight:600;src:url(../fonts/plex-mono-600.woff2)}
+html,body{margin:0;width:1200px;height:630px;overflow:hidden;background:#EDF2EC}
+.c{position:relative;width:1200px;height:630px;color:#15241E}
+canvas{position:absolute;inset:0}
+.t{position:absolute;left:84px;top:66px}
+.k{font:600 24px PM,monospace;letter-spacing:.12em;text-transform:uppercase;color:#56675E}
+h1{margin:18px 0 0;font:800 136px/.88 BS,sans-serif;text-transform:uppercase}
+h1 em{font-style:normal;color:#1D6A4F;display:block}
+p{margin:24px 0 0;font:400 30px/1.35 AT,sans-serif;color:#33443B;max-width:620px}
+.pill{display:inline-block;margin-top:28px;font:700 26px AT,sans-serif;background:#1D6A4F;color:#F6FBF8;padding:16px 26px;border-radius:14px}
+</style></head><body><div class="c"><canvas id="cv" width="1200" height="630"></canvas>
+<div class="t"><div class="k">Teste gratuito · 20 minutos</div><h1>Qual é o<em>meu rumo?</em></h1>
+<p>Descubra o que combina com você e teste na prática em 30 dias.</p><div class="pill">Fazer o teste</div></div></div>
+<script>
+const c=document.getElementById('cv').getContext('2d');const W=1200,H=630,cx=W*.8,cy=H*.38,step=W*.045;
+c.strokeStyle='rgba(29,106,79,.2)';
+for(let k=1;k<=18;k++){c.lineWidth=k%5===0?3:1.6;c.beginPath();for(let s=0;s<=160;s++){const a=s/160*Math.PI*2;const w=1+.13*Math.sin(3*a+k*.55)+.07*Math.sin(5*a-k*.35)+.04*Math.cos(7*a+k*.9);const x=cx+Math.cos(a)*k*step*w*1.3,y=cy+Math.sin(a)*k*step*w*.85;s?c.lineTo(x,y):c.moveTo(x,y)}c.closePath();c.stroke()}
+c.strokeStyle='#D5960A';c.fillStyle='#D5960A';c.lineWidth=6;c.beginPath();c.moveTo(cx,cy+34);c.lineTo(cx,cy-54);c.stroke();
+c.beginPath();c.moveTo(cx,cy-54);c.lineTo(cx+50,cy-36);c.lineTo(cx,cy-18);c.closePath();c.fill();c.beginPath();c.arc(cx,cy+34,9,0,Math.PI*2);c.fill();
+</script></body></html>
