@@ -5,6 +5,7 @@ Teste gratuito de orientação profissional, em português do Brasil, pensado pa
 - Site no ar: https://pedromanoel3000-bit.github.io/Qual-meu-rumo-/
 - Responda e escreva sempre em português do Brasil, de forma direta.
 - O Pedro prefere aprovar cada parte antes de seguir para a próxima.
+- Linguagem neutra: o texto não marca o gênero de quem faz o teste. Prefira substantivos e frases sem concordância (“Como podemos te chamar?”, “alguém da área”, “pessoas conhecidas”). Os nomes dos tipos RIASEC concordam com “perfil” (Investigativo, Artístico, Empreendedor).
 
 ## Como o site funciona
 
@@ -17,15 +18,17 @@ Fluxo: abertura → 4 etapas → resultado.
 3. **Realidade** (`REAL`): trabalho, renda, horas, dinheiro para investir, estudo, faculdade e prazo.
 4. **Reflexão** (`REFL`): 6 perguntas abertas e opcionais.
 
-Resultado: código RIASEC (3 letras), barras por tipo, preferências escolhidas, caminhos ordenados por afinidade, plano de 30 dias, placar de decisão (`CRIT`, notas de 1 a 5), perguntas para conversar (`ASK`), botão de WhatsApp e botão para copiar o resumo.
+Resultado: código RIASEC (3 letras), barras por tipo, preferências escolhidas, caminhos ordenados por afinidade (os 6 primeiros em cartão completo; os outros numa lista compacta que abre ao tocar), plano de 30 dias, placar de decisão (`CRIT`, notas de 1 a 5), perguntas para conversar (`ASK`), botão de WhatsApp e botão para copiar o resumo.
 
 ### Pontuação dos caminhos (`scorePaths`)
 
-Cada caminho em `PATHS` tem:
+São 51 caminhos em `PATHS`. Cada um tem:
 - `rx`: peso de cada tipo RIASEC (0 a 3);
 - `pre` / `con`: preferências que combinam ou conflitam;
 - `ent` (curto, medio, longo), `inv` (investimento de 0 a 3), `fac` (exige faculdade), `rem` (remoto de 0 a 2), `renda` (fixa, variavel, ambas);
 - `teste` e `passo`: o experimento de 30 dias e o primeiro passo.
+
+Ao criar um caminho: use só chaves que existem em `DIMS`, nunca coloque em `pre` duas preferências opostas (veja `OPP`) e use um `id` novo, porque os ids ficam salvos no aparelho (`picks`, `sc`, `done`). Adicionar caminhos não apaga as respostas salvas.
 
 Total = 60% interesses + 30% preferências + 10% fixo − penalidades de realidade (faculdade indesejada, prazo curto, falta de dinheiro, renda variável). A afinidade exibida fica entre 18% e 97%.
 
@@ -51,5 +54,4 @@ Atenção: se mudar a quantidade de itens em `ITEMS`, `PAIRS` ou `REFL`, as resp
 
 ## Pendências conhecidas
 
-- O texto está no feminino porque foi escrito para uma pessoa só: "Como você quer ser chamada?", "sentada", "concentrada", "dona", "contratada", "orgulhosa" e os rótulos em `DIMS`. Para o público em geral, deixe a linguagem neutra.
 - Não há contador de visitas nem coleta de resultados. Se forem adicionados, avise as pessoas sobre os dados (LGPD).

@@ -187,6 +187,16 @@ details{border-top:1px solid var(--line);padding-top:10px}
 summary{cursor:pointer;font-weight:700;color:var(--accent);list-style-position:inside}
 details p{margin-top:8px}
 details p b{display:block;font:600 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.minis{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+details.mini{border:1px solid var(--line);border-radius:12px;padding:0;background:var(--paper);min-width:0}
+details.mini.picked{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+details.mini>summary{display:flex;align-items:center;gap:10px;padding:12px 14px;color:var(--ink);list-style:none;min-height:52px}
+details.mini>summary::-webkit-details-marker{display:none}
+details.mini>summary::after{content:"+";flex:none;width:18px;text-align:center;font:600 20px/1 var(--f-mono);color:var(--accent)}
+details.mini[open]>summary::after{content:"\2212"}
+.mrank{flex:none;min-width:30px;font:600 12px var(--f-mono);color:var(--muted);letter-spacing:.04em}
+.mname{flex:1;min-width:0;line-height:1.25}
+.mbody{padding:0 14px 14px;display:flex;flex-direction:column;gap:12px}
 .pick{align-self:flex-start;padding:10px 14px;border-radius:10px;border:1.5px solid var(--accent);background:transparent;color:var(--accent);font-weight:700}
 .pick[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
 .weeks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
@@ -229,11 +239,11 @@ details p b{display:block;font:600 12px var(--f-mono);letter-spacing:.06em;text-
 "use strict";
 const TYPES = {
   R:{nome:"Realista", ap:"Mão na massa", desc:"Você gosta de coisas concretas: usar as mãos, ferramentas, o corpo, cuidar de plantas ou animais. Ver o resultado na hora te satisfaz."},
-  I:{nome:"Investigativa", ap:"Curiosa", desc:"Você gosta de entender como as coisas funcionam, pesquisar, analisar e resolver problemas difíceis. Perguntas te movem."},
-  A:{nome:"Artística", ap:"Criativa", desc:"Você gosta de criar, se expressar e deixar as coisas bonitas. Precisa de espaço para ideias novas e sofre com tudo engessado."},
-  S:{nome:"Social", ap:"Cuidadora", desc:"Você gosta de ajudar, ensinar, ouvir e cuidar de pessoas. Ver alguém melhorar por sua causa é o que dá sentido."},
-  E:{nome:"Empreendedora", ap:"Realizadora", desc:"Você gosta de liderar, convencer, vender e fazer as coisas acontecerem. Metas e desafios te animam."},
-  C:{nome:"Convencional", ap:"Organizadora", desc:"Você gosta de ordem, planejamento, números e processos claros. Fazer bem feito e sem erro te dá prazer."}
+  I:{nome:"Investigativo", ap:"Curiosidade", desc:"Você gosta de entender como as coisas funcionam, pesquisar, analisar e resolver problemas difíceis. Perguntas te movem."},
+  A:{nome:"Artístico", ap:"Criatividade", desc:"Você gosta de criar, se expressar e deixar as coisas bonitas. Precisa de espaço para ideias novas e sofre com tudo engessado."},
+  S:{nome:"Social", ap:"Cuidado com pessoas", desc:"Você gosta de ajudar, ensinar, ouvir e cuidar de pessoas. Ver alguém melhorar por sua causa é o que dá sentido."},
+  E:{nome:"Empreendedor", ap:"Fazer acontecer", desc:"Você gosta de liderar, convencer, vender e fazer as coisas acontecerem. Metas e desafios te animam."},
+  C:{nome:"Convencional", ap:"Organização", desc:"Você gosta de ordem, planejamento, números e processos claros. Fazer bem feito e sem erro te dá prazer."}
 };
 const TORDER = ["R","I","A","S","E","C"];
 
@@ -256,13 +266,13 @@ const ITEMS = [
   ["S","Cuidar de pessoas doentes, idosas ou de crianças"],
   ["E","Abrir e tocar o seu próprio negócio"],
   ["C","Seguir um processo bem definido, com passo a passo"],
-  ["R","Fazer um trabalho manual que exige precisão (costura, unhas, curativos)"],
+  ["R","Fazer um trabalho manual que exige precisão (costura, marcenaria, unhas, curativos)"],
   ["I","Resolver quebra-cabeças, enigmas ou problemas difíceis"],
   ["A","Decorar ambientes ou montar looks"],
   ["S","Fazer trabalho voluntário por uma causa"],
   ["E","Negociar preços, acordos ou condições"],
   ["C","Conferir detalhes e encontrar erros que ninguém viu"],
-  ["R","Trabalhar se movimentando, em vez de passar o dia sentada"],
+  ["R","Trabalhar se movimentando, em vez de passar o dia atrás de uma mesa"],
   ["I","Ler sobre ciência, psicologia ou comportamento humano"],
   ["A","Inventar receitas, produtos ou ideias novas"],
   ["S","Atender e acolher pessoas com paciência"],
@@ -284,9 +294,9 @@ const SCALE = [
 
 const PAIRS = [
   {a:["Salário fixo todo mês, sem surpresa","estab"], b:["Ganho variável, mas sem teto","variavel"]},
-  {a:["Lidar com gente o dia inteiro","pessoas"], b:["Trabalhar concentrada, mais na minha","sozinha"]},
+  {a:["Lidar com gente o dia inteiro","pessoas"], b:["Trabalhar com foco, mais na minha","individual"]},
   {a:["Rotina previsível, sei o que me espera","rotina"], b:["Cada dia diferente do outro","variedade"]},
-  {a:["Ser dona do meu próprio negócio","dona"], b:["Ser contratada, sem a dor de cabeça de gerir","empregada"]},
+  {a:["Ter meu próprio negócio","negocio"], b:["Ter um emprego, sem a dor de cabeça de gerir um negócio","emprego"]},
   {a:["Estudar 4 ou 5 anos para ter uma profissão sólida","longo"], b:["Começar em poucos meses e aprender na prática","curto"]},
   {a:["Aparecer e ser a cara do trabalho","visivel"], b:["Ficar nos bastidores, fazendo acontecer","bastidor"]},
   {a:["Trabalho prático, com as mãos","maos"], b:["Trabalho de cabeça, no computador ou no papel","mente"]},
@@ -297,8 +307,8 @@ const PAIRS = [
   {a:["Ver alguém melhorar por minha causa","ajudar"], b:["Ver algo que eu criei, pronto e bonito","criar"]}
 ];
 const DIMS = {
-  estab:"Salário fixo", variavel:"Ganho por resultado", pessoas:"Lidar com pessoas", sozinha:"Trabalhar concentrada",
-  rotina:"Rotina previsível", variedade:"Dias variados", dona:"Ser dona do negócio", empregada:"Ser contratada",
+  estab:"Salário fixo", variavel:"Ganho por resultado", pessoas:"Lidar com pessoas", individual:"Trabalho mais individual",
+  rotina:"Rotina previsível", variedade:"Dias variados", negocio:"Ter o próprio negócio", emprego:"Ter um emprego",
   longo:"Formação longa e sólida", curto:"Começar rápido", visivel:"Aparecer", bastidor:"Bastidores",
   maos:"Trabalho prático", mente:"Trabalho intelectual", lider:"Liderar", executar:"Executar bem",
   dinheiro:"Ganhar bem", proposito:"Amar o que faz", remoto:"Trabalhar de casa", presencial:"Presencial, com gente",
@@ -323,7 +333,7 @@ const REFL = [
   "Se dinheiro não fosse problema por um ano, como seria uma terça-feira sua?",
   "De quem você sente uma pontinha de inveja, da vida ou do trabalho? O que exatamente?",
   "O que você tem certeza de que NÃO quer para a sua vida?",
-  "O que você já fez e te deixou orgulhosa de si mesma?"
+  "De tudo o que você já fez, do que você mais se orgulha?"
 ];
 
 const ASK = [
@@ -336,58 +346,108 @@ const ASK = [
 
 /* rx: peso RIASEC (0-3) · pre/con: preferências que combinam ou conflitam · ent: tempo até começar · inv: investimento (0-3) · fac: exige faculdade · rem: remoto (0-2) · renda */
 const PATHS = [
-  {id:"enf", nome:"Enfermagem", desc:"Cuidar de pacientes na prática, em hospitais, postos e clínicas.", form:"Técnico (cerca de 2 anos) ou faculdade (5 anos)", rx:{S:3,R:2,I:2}, pre:["pessoas","presencial","proposito","estab","maos","ajudar"], con:["remoto","sozinha"], ent:"medio", inv:2, fac:false, rem:0, renda:"fixa",
+  {id:"enf", nome:"Enfermagem", desc:"Cuidar de pacientes na prática, em hospitais, postos e clínicas.", form:"Técnico (cerca de 2 anos) ou faculdade (5 anos)", rx:{S:3,R:2,I:2}, pre:["pessoas","presencial","proposito","estab","maos","ajudar"], con:["remoto","individual"], ent:"medio", inv:2, fac:false, rem:0, renda:"fixa",
    teste:"Converse com 3 profissionais de enfermagem sobre a rotina real, acompanhe parte de um plantão se for permitido e faça um curso livre de primeiros socorros.", passo:"Marque 20 minutos com alguém da enfermagem e pergunte o que é melhor e o que é pior na profissão."},
   {id:"psi", nome:"Psicologia", desc:"Entender e ajudar pessoas em consultório, empresas, escolas ou na saúde.", form:"Faculdade de 5 anos", rx:{S:3,I:3,A:1}, pre:["pessoas","proposito","longo","ajudar","mente"], con:["curto","maos"], ent:"longo", inv:3, fac:true, rem:1, renda:"ambas",
-   teste:"Faça um curso introdutório gratuito de psicologia, leia um livro da área e converse com 2 psicólogas sobre a faculdade e o mercado.", passo:"Assista a uma aula introdutória gratuita e anote o que mais prendeu sua atenção."},
+   teste:"Faça um curso introdutório gratuito de psicologia, leia um livro da área e converse com 2 pessoas formadas em psicologia sobre a faculdade e o mercado.", passo:"Assista a uma aula introdutória gratuita e anote o que mais prendeu sua atenção."},
   {id:"nut", nome:"Nutrição", desc:"Orientar a alimentação para saúde, estética ou esporte, em consultório, hospital ou online.", form:"Faculdade de 4 anos", rx:{I:3,S:3,R:1}, pre:["ajudar","proposito","longo","pessoas","mente"], con:["curto"], ent:"longo", inv:3, fac:true, rem:1, renda:"ambas",
-   teste:"Faça um curso livre de nutrição básica, acompanhe por 2 semanas o trabalho de nutricionistas nas redes e converse com um profissional.", passo:"Compare duas faculdades de nutrição (presencial e EAD): preço, duração e disciplinas."},
-  {id:"gas", nome:"Gastronomia e confeitaria", desc:"Criar e produzir comida com técnica, para vender, ensinar ou trabalhar em cozinhas.", form:"Cursos livres ou técnico; dá para começar já", rx:{R:3,A:2,E:2}, pre:["maos","criar","dona","variavel","presencial"], con:["remoto"], ent:"curto", inv:2, fac:false, rem:0, renda:"variavel",
-   teste:"Desenvolva um produto, venda uma fornada para conhecidos num fim de semana e anote custo, lucro e o quanto curtiu o processo.", passo:"Escolha uma receita que você faria com orgulho e calcule quanto custa cada unidade."},
-  {id:"pub", nome:"Carreira pública (concursos)", desc:"Estabilidade e bons salários em tribunais, INSS, bancos públicos e prefeituras.", form:"Muitos são de nível médio; 1 a 2 anos de estudo", rx:{C:3,I:2,E:1}, pre:["estab","rotina","executar","mente","dinheiro","bastidor"], con:["variavel","dona"], ent:"medio", inv:1, fac:false, rem:0, renda:"fixa",
+   teste:"Faça um curso livre de nutrição básica, acompanhe por 2 semanas o trabalho de nutricionistas nas redes e converse com alguém da área.", passo:"Compare duas faculdades de nutrição (presencial e EAD): preço, duração e disciplinas."},
+  {id:"gas", nome:"Gastronomia e confeitaria", desc:"Criar e produzir comida com técnica, para vender, ensinar ou trabalhar em cozinhas.", form:"Cursos livres ou técnico; dá para começar já", rx:{R:3,A:2,E:2}, pre:["maos","criar","negocio","variavel","presencial"], con:["remoto"], ent:"curto", inv:2, fac:false, rem:0, renda:"variavel",
+   teste:"Desenvolva um produto, venda uma fornada para pessoas conhecidas num fim de semana e anote custo, lucro e o quanto curtiu o processo.", passo:"Escolha uma receita que você faria com orgulho e calcule quanto custa cada unidade."},
+  {id:"pub", nome:"Carreira pública (concursos)", desc:"Estabilidade e bons salários em tribunais, INSS, bancos públicos e prefeituras.", form:"Muitos são de nível médio; 1 a 2 anos de estudo", rx:{C:3,I:2,E:1}, pre:["estab","rotina","executar","mente","dinheiro","bastidor"], con:["variavel","negocio"], ent:"medio", inv:1, fac:false, rem:0, renda:"fixa",
    teste:"Resolva uma prova antiga do concurso que mais te atrai e estude 1 hora por dia durante 30 dias para ver se aguenta a rotina.", passo:"Liste 3 concursos com salário e requisitos que fazem sentido para você."},
   {id:"adm", nome:"Administração e gestão", desc:"Organizar equipes, processos e números de empresas, hospitais ou do próprio negócio.", form:"Tecnólogo (2 anos) ou bacharelado (4 anos), inclusive EAD", rx:{E:3,C:3,S:1}, pre:["lider","mente","dinheiro","estab","pessoas"], con:["maos"], ent:"medio", inv:2, fac:false, rem:1, renda:"fixa",
-   teste:"Faça um curso curto de gestão ou Excel, acompanhe um gestor por um dia e assuma a organização de um projeto real.", passo:"Anote tudo que você já organizou na vida e onde foi você quem resolveu."},
-  {id:"fin", nome:"Finanças e contabilidade", desc:"Cuidar do dinheiro de empresas e pessoas: contas, impostos e planejamento.", form:"Técnico (2 anos) ou faculdade (4 anos)", rx:{C:3,I:2,E:1}, pre:["mente","rotina","estab","bastidor","remoto","sozinha"], con:["visivel","maos"], ent:"medio", inv:2, fac:false, rem:2, renda:"fixa",
+   teste:"Faça um curso curto de gestão ou Excel, acompanhe por um dia a rotina de quem faz gestão e assuma a organização de um projeto real.", passo:"Anote tudo que você já organizou na vida e onde foi você quem resolveu."},
+  {id:"fin", nome:"Finanças e contabilidade", desc:"Cuidar do dinheiro de empresas e pessoas: contas, impostos e planejamento.", form:"Técnico (2 anos) ou faculdade (4 anos)", rx:{C:3,I:2,E:1}, pre:["mente","rotina","estab","bastidor","remoto","individual"], con:["visivel","maos"], ent:"medio", inv:2, fac:false, rem:2, renda:"fixa",
    teste:"Faça um curso gratuito de contabilidade básica ou Excel financeiro e organize as finanças da casa ou de um pequeno negócio por um mês.", passo:"Monte uma planilha com os gastos do último mês e repare se a tarefa te dá prazer ou tédio."},
   {id:"mkt", nome:"Marketing digital", desc:"Cuidar das redes sociais, anúncios e da comunicação de negócios.", form:"Cursos livres; dá para começar em meses", rx:{E:3,A:2,C:1}, pre:["criar","remoto","variedade","variavel","curto","mente"], con:["maos"], ent:"curto", inv:1, fac:false, rem:2, renda:"ambas",
    teste:"Cuide do Instagram de um negócio local por 30 dias (pode ser de graça no começo): planeje, poste e meça os resultados.", passo:"Escolha um comércio que você admira e anote 5 ideias de post que melhorariam o perfil dele."},
-  {id:"cont", nome:"Criação de conteúdo", desc:"Produzir vídeos e posts sobre um tema e ganhar com parcerias, produtos ou audiência.", form:"Sem formação obrigatória; exige constância", rx:{A:3,E:3,S:1}, pre:["visivel","criar","dona","variavel","remoto","variedade","curto"], con:["bastidor","estab"], ent:"curto", inv:1, fac:false, rem:2, renda:"variavel",
+  {id:"cont", nome:"Criação de conteúdo", desc:"Produzir vídeos e posts sobre um tema e ganhar com parcerias, produtos ou audiência.", form:"Sem formação obrigatória; exige constância", rx:{A:3,E:3,S:1}, pre:["visivel","criar","negocio","variavel","remoto","variedade","curto"], con:["bastidor","estab"], ent:"curto", inv:1, fac:false, rem:2, renda:"variavel",
    teste:"Publique 3 conteúdos por semana sobre um tema que você domina, por 30 dias, e veja se o processo te anima mesmo sem retorno rápido.", passo:"Liste 10 temas sobre os quais você falaria por horas e escolha um."},
-  {id:"des", nome:"Design gráfico", desc:"Criar identidades visuais, posts, embalagens e materiais para marcas.", form:"Cursos livres ou tecnólogo", rx:{A:3,R:1,I:1,C:1}, pre:["criar","remoto","bastidor","sozinha","mente","curto"], con:["visivel"], ent:"curto", inv:1, fac:false, rem:2, renda:"ambas",
-   teste:"Faça um curso gratuito de Canva ou Figma e crie 5 peças reais para negócios de conhecidos.", passo:"Recrie no Canva um post de uma marca que você acha bonita, só para sentir o processo."},
-  {id:"foto", nome:"Fotografia e vídeo", desc:"Registrar pessoas, eventos e produtos e editar vídeos para marcas e redes.", form:"Cursos livres; começa com o celular", rx:{A:3,R:2,E:1}, pre:["criar","variedade","variavel","dona","maos","presencial"], con:["rotina"], ent:"curto", inv:2, fac:false, rem:1, renda:"variavel",
+  {id:"des", nome:"Design gráfico", desc:"Criar identidades visuais, posts, embalagens e materiais para marcas.", form:"Cursos livres ou tecnólogo", rx:{A:3,R:1,I:1,C:1}, pre:["criar","remoto","bastidor","individual","mente","curto"], con:["visivel"], ent:"curto", inv:1, fac:false, rem:2, renda:"ambas",
+   teste:"Faça um curso gratuito de Canva ou Figma e crie 5 peças reais para negócios de pessoas conhecidas.", passo:"Recrie no Canva um post de uma marca que você acha bonita, só para sentir o processo."},
+  {id:"foto", nome:"Fotografia e vídeo", desc:"Registrar pessoas, eventos e produtos e editar vídeos para marcas e redes.", form:"Cursos livres; começa com o celular", rx:{A:3,R:2,E:1}, pre:["criar","variedade","variavel","negocio","maos","presencial"], con:["rotina"], ent:"curto", inv:2, fac:false, rem:1, renda:"variavel",
    teste:"Faça um ensaio gratuito com 3 pessoas usando o celular, edite e entregue. Repare se você quer fazer de novo.", passo:"Fotografe 20 imagens de um mesmo tema nesta semana e escolha as 3 melhores."},
-  {id:"edu", nome:"Educação e pedagogia", desc:"Ensinar crianças, jovens ou adultos em escolas, reforço escolar ou cursos.", form:"Licenciatura (4 anos); reforço dá para começar já", rx:{S:3,A:2,C:1}, pre:["pessoas","ajudar","proposito","estab","rotina","presencial"], con:["sozinha"], ent:"longo", inv:2, fac:true, rem:1, renda:"fixa",
-   teste:"Dê aulas de reforço ou ensine algo que você sabe para 2 ou 3 pessoas durante um mês.", passo:"Ofereça ensinar uma habilidade sua a alguém próximo e marque o primeiro encontro."},
-  {id:"est", nome:"Estética e beleza", desc:"Maquiagem, sobrancelhas, unhas, cabelo ou estética facial e corporal.", form:"Cursos de 1 a 6 meses; tecnólogo opcional", rx:{R:3,A:2,S:2,E:2}, pre:["maos","pessoas","dona","variavel","presencial","curto","criar"], con:["remoto"], ent:"curto", inv:2, fac:false, rem:0, renda:"variavel",
-   teste:"Faça um curso curto na área que mais te atrai e atenda 5 pessoas conhecidas a preço de custo, pedindo opinião sincera.", passo:"Pesquise cursos de 1 a 3 meses na sua cidade e quanto cobram as profissionais da área."},
+  {id:"edu", nome:"Educação e pedagogia", desc:"Ensinar crianças, jovens ou adultos em escolas, reforço escolar ou cursos.", form:"Licenciatura (4 anos); reforço dá para começar já", rx:{S:3,A:2,C:1}, pre:["pessoas","ajudar","proposito","estab","rotina","presencial"], con:["individual"], ent:"longo", inv:2, fac:true, rem:1, renda:"fixa",
+   teste:"Dê aulas de reforço ou ensine algo que você sabe para 2 ou 3 pessoas durante um mês.", passo:"Ofereça ensinar uma habilidade sua a alguém da sua convivência e marque o primeiro encontro."},
+  {id:"est", nome:"Estética e beleza", desc:"Cabelo, barbearia, maquiagem, sobrancelhas, unhas ou estética facial e corporal.", form:"Cursos de 1 a 6 meses; tecnólogo opcional", rx:{R:3,A:2,S:2,E:2}, pre:["maos","pessoas","negocio","variavel","presencial","curto","criar"], con:["remoto"], ent:"curto", inv:2, fac:false, rem:0, renda:"variavel",
+   teste:"Faça um curso curto na área que mais te atrai e atenda 5 pessoas conhecidas a preço de custo, pedindo opinião sincera.", passo:"Pesquise cursos de 1 a 3 meses na sua cidade e quanto se cobra pelo serviço na região."},
   {id:"fis", nome:"Fisioterapia", desc:"Reabilitar movimentos e aliviar dores em clínicas, hospitais e no esporte.", form:"Faculdade de 5 anos", rx:{S:3,R:3,I:2}, pre:["maos","pessoas","ajudar","longo","presencial","proposito"], con:["remoto"], ent:"longo", inv:3, fac:true, rem:0, renda:"ambas",
-   teste:"Converse com 2 fisioterapeutas, acompanhe um atendimento se possível e assista a uma aula introdutória de anatomia.", passo:"Pergunte a um fisioterapeuta o que ele faria diferente se começasse hoje."},
-  {id:"lab", nome:"Farmácia e análises clínicas", desc:"Medicamentos, exames e laboratório, com rigor técnico.", form:"Técnico (2 anos) ou faculdade (5 anos)", rx:{I:3,C:2,R:2}, pre:["mente","rotina","bastidor","estab","longo"], con:["visivel","dona"], ent:"longo", inv:3, fac:false, rem:0, renda:"fixa",
+   teste:"Converse com 2 fisioterapeutas, acompanhe um atendimento se possível e assista a uma aula introdutória de anatomia.", passo:"Pergunte a alguém da fisioterapia o que faria diferente se começasse hoje."},
+  {id:"lab", nome:"Farmácia e análises clínicas", desc:"Medicamentos, exames e laboratório, com rigor técnico.", form:"Técnico (2 anos) ou faculdade (5 anos)", rx:{I:3,C:2,R:2}, pre:["mente","rotina","bastidor","estab","longo"], con:["visivel","negocio"], ent:"longo", inv:3, fac:false, rem:0, renda:"fixa",
    teste:"Visite um laboratório ou farmácia, converse com quem trabalha lá e faça um curso livre de biossegurança.", passo:"Pesquise a diferença entre farmácia, biomedicina e técnico em análises clínicas."},
   {id:"dir", nome:"Direito", desc:"Defender pessoas e empresas, interpretar leis e abrir portas para concursos jurídicos.", form:"Faculdade de 5 anos", rx:{E:3,I:2,S:2,C:2}, pre:["mente","longo","lider","dinheiro","visivel","estab"], con:["maos","curto"], ent:"longo", inv:3, fac:true, rem:1, renda:"ambas",
-   teste:"Assista a audiências públicas no fórum, leia um caso real e converse com 2 advogadas sobre a rotina.", passo:"Assista a uma aula introdutória gratuita de Direito e veja se o raciocínio te prende."},
-  {id:"tec", nome:"Tecnologia e dados", desc:"Programação, análise de dados ou suporte, com muitas vagas remotas.", form:"Cursos de 6 a 12 meses ou tecnólogo", rx:{I:3,C:2,R:1}, pre:["mente","remoto","sozinha","dinheiro","bastidor"], con:["pessoas","maos"], ent:"medio", inv:1, fac:false, rem:2, renda:"fixa",
+   teste:"Assista a audiências públicas no fórum, leia um caso real e converse com 2 pessoas da advocacia sobre a rotina.", passo:"Assista a uma aula introdutória gratuita de Direito e veja se o raciocínio te prende."},
+  {id:"tec", nome:"Tecnologia e dados", desc:"Programação, análise de dados ou suporte, com muitas vagas remotas.", form:"Cursos de 6 a 12 meses ou tecnólogo", rx:{I:3,C:2,R:1}, pre:["mente","remoto","individual","dinheiro","bastidor"], con:["pessoas","maos"], ent:"medio", inv:1, fac:false, rem:2, renda:"fixa",
    teste:"Faça um curso gratuito de lógica de programação ou de análise de dados e termine um projeto pequeno do começo ao fim.", passo:"Faça a primeira aula de um curso gratuito de programação e veja se o desafio te dá vontade de continuar."},
   {id:"rh", nome:"Recursos humanos", desc:"Recrutar, treinar e cuidar das pessoas dentro das empresas.", form:"Tecnólogo (2 anos) ou faculdade", rx:{S:3,E:2,C:2}, pre:["pessoas","estab","rotina","ajudar","presencial","mente"], con:["maos"], ent:"medio", inv:2, fac:false, rem:1, renda:"fixa",
-   teste:"Faça um curso livre de RH e converse com alguém do RH de uma empresa ou hospital sobre o dia a dia.", passo:"Ajude um conhecido a melhorar o currículo e repare se gostou do processo."},
-  {id:"ven", nome:"Vendas e negociação", desc:"Vender produtos e serviços, com ganho que cresce junto com o resultado.", form:"Sem formação obrigatória", rx:{E:3,S:2,C:1}, pre:["pessoas","variavel","dinheiro","curto","visivel","variedade"], con:["sozinha","estab"], ent:"curto", inv:0, fac:false, rem:1, renda:"variavel",
+   teste:"Faça um curso livre de RH e converse com alguém do RH de uma empresa ou hospital sobre o dia a dia.", passo:"Ajude alguém a melhorar o currículo e repare se gostou do processo."},
+  {id:"ven", nome:"Vendas e negociação", desc:"Vender produtos e serviços, com ganho que cresce junto com o resultado.", form:"Sem formação obrigatória", rx:{E:3,S:2,C:1}, pre:["pessoas","variavel","dinheiro","curto","visivel","variedade"], con:["individual","estab"], ent:"curto", inv:0, fac:false, rem:1, renda:"variavel",
    teste:"Revenda um produto que você usa e gosta por 30 dias e anote quanto vendeu e como se sentiu abordando pessoas.", passo:"Escolha um produto e ofereça para 5 pessoas nesta semana."},
-  {id:"neg", nome:"Negócio próprio", desc:"Criar algo seu, um produto, serviço ou loja, com liberdade e risco.", form:"Sem formação obrigatória; exige capital e gestão", rx:{E:3,A:2,C:1}, pre:["dona","lider","variavel","dinheiro","variedade","visivel"], con:["estab","rotina","empregada"], ent:"curto", inv:3, fac:false, rem:1, renda:"variavel",
+  {id:"neg", nome:"Negócio próprio", desc:"Criar algo seu, um produto, serviço ou loja, com liberdade e risco.", form:"Sem formação obrigatória; exige capital e gestão", rx:{E:3,A:2,C:1}, pre:["negocio","lider","variavel","dinheiro","variedade","visivel"], con:["estab","rotina","emprego"], ent:"curto", inv:3, fac:false, rem:1, renda:"variavel",
    teste:"Valide uma ideia pequena: faça 10 vendas antes de investir pesado e calcule se o lucro compensa o esforço.", passo:"Escreva 3 ideias de negócio e, para cada uma, quem pagaria e quanto."},
-  {id:"cur", nome:"Cursos e ensino online", desc:"Transformar o que você sabe em aulas, mentorias ou cursos digitais.", form:"Sem formação obrigatória; exige saber algo bem", rx:{E:3,S:2,A:2}, pre:["visivel","dona","remoto","ajudar","variavel","criar"], con:["bastidor","estab"], ent:"curto", inv:1, fac:false, rem:2, renda:"variavel",
+  {id:"cur", nome:"Cursos e ensino online", desc:"Transformar o que você sabe em aulas, mentorias ou cursos digitais.", form:"Sem formação obrigatória; exige saber algo bem", rx:{E:3,S:2,A:2}, pre:["visivel","negocio","remoto","ajudar","variavel"], con:["bastidor","estab"], ent:"curto", inv:1, fac:false, rem:2, renda:"variavel",
    teste:"Ensine uma habilidade sua numa aula ao vivo gratuita para 5 a 10 pessoas e peça feedback.", passo:"Liste o que você sabe fazer melhor que a maioria das pessoas à sua volta."},
   {id:"ass", nome:"Assistente virtual e secretariado", desc:"Organizar agendas, e-mails e rotinas de profissionais e empresas, de casa.", form:"Cursos livres; dá para começar em semanas", rx:{C:3,S:2,E:1}, pre:["remoto","rotina","executar","bastidor","curto","mente"], con:["lider","visivel"], ent:"curto", inv:0, fac:false, rem:2, renda:"ambas",
-   teste:"Ofereça organização de agenda e atendimento para 2 profissionais autônomos por um mês.", passo:"Pergunte a 3 profissionais autônomos qual tarefa de organização mais toma tempo deles."},
-  {id:"mod", nome:"Moda, costura e artesanato", desc:"Criar roupas, acessórios ou peças à mão, para vender ou sob encomenda.", form:"Cursos livres ou técnico", rx:{A:3,R:3,E:1}, pre:["maos","criar","dona","sozinha","variavel","bastidor"], con:["estab"], ent:"curto", inv:2, fac:false, rem:1, renda:"variavel",
+   teste:"Ofereça organização de agenda e atendimento para 2 pessoas que trabalham por conta própria, por um mês.", passo:"Pergunte a 3 pessoas que trabalham por conta própria qual tarefa de organização mais toma o tempo delas."},
+  {id:"mod", nome:"Moda, costura e artesanato", desc:"Criar roupas, acessórios ou peças à mão, para vender ou sob encomenda.", form:"Cursos livres ou técnico", rx:{A:3,R:3,E:1}, pre:["maos","criar","negocio","individual","variavel","bastidor"], con:["estab"], ent:"curto", inv:2, fac:false, rem:1, renda:"variavel",
    teste:"Faça uma peça por semana durante 4 semanas e tente vender pelo menos 2.", passo:"Escolha uma peça simples e assista a um tutorial completo de como fazê-la."},
-  {id:"vet", nome:"Animais e meio ambiente", desc:"Veterinária, cuidado com animais, agro ou sustentabilidade.", form:"Faculdade (5 anos) ou técnico (agropecuária, meio ambiente)", rx:{R:3,I:3,S:1}, pre:["maos","presencial","proposito","longo","variedade"], con:["remoto"], ent:"longo", inv:3, fac:true, rem:0, renda:"ambas",
-   teste:"Seja voluntária numa ONG de animais ou num projeto ambiental por 4 fins de semana.", passo:"Procure uma ONG ou clínica veterinária perto de você e pergunte se aceitam voluntários."},
-  {id:"evt", nome:"Eventos e turismo", desc:"Planejar festas, casamentos, viagens e experiências.", form:"Cursos livres ou tecnólogo", rx:{E:3,S:2,C:2,A:1}, pre:["variedade","pessoas","lider","presencial","criar","variavel"], con:["rotina","sozinha"], ent:"curto", inv:1, fac:false, rem:0, renda:"variavel",
-   teste:"Organize do zero um evento pequeno (aniversário, encontro, jantar) com orçamento e cronograma.", passo:"Ofereça ajuda para organizar o próximo evento de alguém próximo."},
+  {id:"vet", nome:"Animais e meio ambiente", desc:"Veterinária, cuidado com animais, meio ambiente e sustentabilidade.", form:"Faculdade (5 anos) ou técnico (agropecuária, meio ambiente)", rx:{R:3,I:3,S:1}, pre:["maos","presencial","proposito","longo","variedade"], con:["remoto"], ent:"longo", inv:3, fac:true, rem:0, renda:"ambas",
+   teste:"Faça trabalho voluntário numa ONG de animais ou num projeto ambiental por 4 fins de semana.", passo:"Procure uma ONG ou clínica veterinária perto de você e pergunte se dá para fazer trabalho voluntário lá."},
+  {id:"evt", nome:"Eventos e turismo", desc:"Planejar festas, casamentos, viagens e experiências.", form:"Cursos livres ou tecnólogo", rx:{E:3,S:2,C:2,A:1}, pre:["variedade","pessoas","lider","presencial","criar","variavel"], con:["rotina","individual"], ent:"curto", inv:1, fac:false, rem:0, renda:"variavel",
+   teste:"Organize do zero um evento pequeno (aniversário, encontro, jantar) com orçamento e cronograma.", passo:"Ofereça ajuda para organizar o próximo evento da família ou de alguém da sua convivência."},
   {id:"soc", nome:"Serviço social", desc:"Garantir direitos e apoiar famílias na saúde, na assistência e na educação.", form:"Faculdade de 4 anos", rx:{S:3,C:2,E:1}, pre:["ajudar","proposito","pessoas","estab","longo","presencial"], con:["remoto","dinheiro"], ent:"longo", inv:2, fac:true, rem:0, renda:"fixa",
-   teste:"Converse com a assistente social de um hospital ou CRAS e faça um voluntariado social por um mês.", passo:"Descubra o que faz a assistente social do lugar onde você trabalha ou mora."}
+   teste:"Converse com a equipe de serviço social de um hospital ou CRAS e faça um voluntariado social por um mês.", passo:"Descubra como funciona o serviço social do lugar onde você trabalha ou mora."},
+  {id:"eng", nome:"Engenharia", desc:"Projetar e melhorar obras, máquinas, fábricas e sistemas de energia, com muita matemática aplicada.", form:"Faculdade de 5 anos (civil, produção, mecânica, elétrica e outras)", rx:{I:3,R:3,C:1}, pre:["mente","longo","dinheiro","estab","bastidor"], con:["curto"], ent:"longo", inv:3, fac:true, rem:1, renda:"fixa",
+   teste:"Faça um curso gratuito de introdução à engenharia ou de AutoCAD, resolva exercícios de matemática básica por 30 dias e converse com 2 pessoas formadas em engenharia sobre o dia a dia.", passo:"Escolha 2 engenharias que chamam sua atenção e compare as disciplinas de cada curso numa faculdade perto de você."},
+  {id:"mec", nome:"Mecânica e manutenção", desc:"Consertar e manter carros, motos, máquinas industriais ou ar-condicionado.", form:"Cursos livres ou técnico (1 a 2 anos); dá para começar como auxiliar", rx:{R:3,I:1,E:1}, pre:["maos","presencial","curto","executar","negocio"], con:["remoto"], ent:"curto", inv:2, fac:false, rem:0, renda:"ambas",
+   teste:"Faça um curso curto de mecânica básica ou de refrigeração e passe alguns dias acompanhando uma oficina por dentro.", passo:"Pergunte numa oficina perto de você se dá para acompanhar o trabalho por um dia."},
+  {id:"ele", nome:"Elétrica e energia solar", desc:"Instalar e manter redes elétricas, painéis solares e automação em casas e empresas.", form:"Curso de eletricista com NR-10 (meses) ou técnico em eletrotécnica (2 anos)", rx:{R:3,I:2,C:1}, pre:["maos","curto","presencial","dinheiro","variedade"], con:["remoto"], ent:"curto", inv:2, fac:false, rem:0, renda:"ambas",
+   teste:"Faça um curso introdutório de elétrica residencial ou de energia solar e acompanhe uma instalação real com alguém da área.", passo:"Pesquise cursos de eletricista com NR-10 na sua cidade: duração, preço e se ajudam a conseguir estágio."},
+  {id:"obr", nome:"Construção civil e reformas", desc:"Construir, reformar e dar acabamento: obras, pintura, gesso, pisos e projetos de edificações.", form:"Cursos livres ou técnico em edificações (cerca de 2 anos)", rx:{R:3,C:2,E:1}, pre:["maos","presencial","curto","negocio","variavel","variedade"], con:["remoto"], ent:"curto", inv:1, fac:false, rem:0, renda:"ambas",
+   teste:"Faça um curso curto de acabamento, pintura ou leitura de projetos e ajude numa reforma de verdade, do orçamento à entrega.", passo:"Peça para acompanhar por uma manhã alguém que faz obras e reformas e pergunte quanto se cobra por serviço."},
+  {id:"log", nome:"Logística e operações", desc:"Fazer os produtos chegarem ao lugar certo: estoque, compras, transporte e e-commerce.", form:"Cursos curtos ou tecnólogo (2 anos); dá para entrar como auxiliar", rx:{C:3,E:2,R:1}, pre:["rotina","executar","estab","presencial","bastidor"], con:["visivel"], ent:"medio", inv:1, fac:false, rem:0, renda:"fixa",
+   teste:"Faça um curso gratuito de logística ou Excel e observe por uma semana como funciona o estoque de um comércio conhecido, propondo uma melhoria.", passo:"Procure vagas de auxiliar de logística na sua região e anote o que pedem e quanto pagam."},
+  {id:"med", nome:"Medicina", desc:"Diagnosticar e tratar doenças em consultórios, hospitais e na saúde pública.", form:"Faculdade de 6 anos e, em geral, mais 2 a 5 de residência", rx:{I:3,S:3,R:2}, pre:["ajudar","longo","proposito","pessoas","mente"], con:["curto"], ent:"longo", inv:3, fac:true, rem:0, renda:"ambas",
+   teste:"Faça um curso gratuito de anatomia ou fisiologia, converse com 2 pessoas que estudam ou trabalham com medicina e descubra como é a rotina de estudo para o vestibular.", passo:"Veja a nota de corte de medicina no Sisu ou o preço de uma faculdade particular perto de você."},
+  {id:"odo", nome:"Odontologia e saúde bucal", desc:"Cuidar da saúde e da estética dos dentes, com trabalho manual de muita precisão.", form:"Faculdade de 5 anos; auxiliar de saúde bucal leva poucos meses", rx:{R:3,I:2,S:2}, pre:["maos","longo","pessoas","negocio","dinheiro","presencial"], con:["remoto","curto"], ent:"longo", inv:3, fac:true, rem:0, renda:"ambas",
+   teste:"Converse com 2 profissionais de odontologia, acompanhe um atendimento se for permitido e faça um curso livre de introdução à saúde bucal.", passo:"Pergunte a alguém da odontologia o que é melhor e o que é pior na profissão."},
+  {id:"arq", nome:"Arquitetura e interiores", desc:"Projetar casas, prédios e ambientes bonitos, funcionais e que caibam no orçamento.", form:"Arquitetura (5 anos) ou design de interiores (tecnólogo de 2 anos)", rx:{A:3,I:2,R:1,E:1}, pre:["criar","mente","longo","negocio","variedade"], con:["rotina"], ent:"longo", inv:3, fac:true, rem:1, renda:"ambas",
+   teste:"Aprenda o básico do SketchUp com aulas gratuitas e faça o projeto de um cômodo real, com planta, móveis e orçamento.", passo:"Desenhe à mão a planta do cômodo onde você está, com as medidas, e repare se o processo te prende."},
+  {id:"jor", nome:"Jornalismo e comunicação", desc:"Apurar, escrever e contar histórias em sites, TV, rádio, podcasts e assessorias.", form:"Faculdade de 4 anos ajuda; dá para começar escrevendo antes", rx:{A:3,I:2,S:2,E:1}, pre:["mente","criar","variedade","visivel","pessoas"], con:["rotina"], ent:"medio", inv:2, fac:false, rem:1, renda:"ambas",
+   teste:"Escreva 1 reportagem curta por semana sobre algo do seu bairro, com entrevistas, e mostre para alguém da área.", passo:"Escolha um assunto local que pouca gente cobre e liste 3 pessoas que você poderia entrevistar."},
+  {id:"edf", nome:"Educação física e esporte", desc:"Treinar pessoas e dar aulas em academias, escolas, clubes ou consultoria online.", form:"Faculdade de 4 anos (exigida para atuar na área)", rx:{S:3,R:3,E:2}, pre:["pessoas","presencial","ajudar","variedade","negocio","proposito"], con:["remoto","individual"], ent:"longo", inv:2, fac:true, rem:1, renda:"ambas",
+   teste:"Faça um curso livre de primeiros socorros, acompanhe por alguns dias o trabalho numa academia e monte e siga sua própria rotina de treino por 30 dias.", passo:"Converse com alguém que trabalha em academia sobre salário, horários e como começou a ter clientes."},
+  {id:"seg", nome:"Segurança pública e carreiras militares", desc:"Proteger pessoas na polícia, no corpo de bombeiros, na guarda municipal ou nas Forças Armadas.", form:"Concurso público; muitos exigem nível médio, outros faculdade", rx:{R:3,S:2,E:2,C:1}, pre:["estab","presencial","proposito","ajudar","executar","variedade"], con:["remoto"], ent:"medio", inv:1, fac:false, rem:0, renda:"fixa",
+   teste:"Resolva uma prova antiga do concurso que te atrai, treine para o teste físico por 30 dias e converse com alguém da carreira sobre a rotina real.", passo:"Leia o último edital da carreira que te atrai: requisitos, idade, teste físico e salário."},
+  {id:"imo", nome:"Corretagem de imóveis e seguros", desc:"Ajudar pessoas a comprar, vender e alugar imóveis ou contratar seguros, ganhando comissão.", form:"Curso de meses e registro profissional (Creci ou Susep)", rx:{E:3,S:2,C:1}, pre:["pessoas","variavel","dinheiro","negocio","curto","variedade"], con:["estab","individual"], ent:"curto", inv:1, fac:false, rem:1, renda:"variavel",
+   teste:"Acompanhe por algumas semanas o trabalho de quem faz corretagem, ajude em visitas e atendimentos e veja se aguenta ganhar só quando fecha negócio.", passo:"Pesquise o curso de técnico em transações imobiliárias (TTI): preço, duração e se tem versão EAD."},
+  {id:"banc", nome:"Bancos e mercado financeiro", desc:"Atender clientes, analisar crédito e indicar investimentos em bancos, corretoras e financeiras.", form:"Certificações do mercado financeiro (meses de estudo); faculdade ajuda a crescer", rx:{E:3,C:3,I:2}, pre:["dinheiro","mente","pessoas","variavel","lider"], con:["maos"], ent:"medio", inv:1, fac:false, rem:1, renda:"ambas",
+   teste:"Estude por 30 dias para uma certificação básica do mercado financeiro e acompanhe o noticiário econômico, explicando o que leu para alguém.", passo:"Veja vagas de banco na sua região e anote as certificações que pedem."},
+  {id:"ate", nome:"Atendimento e suporte ao cliente", desc:"Resolver dúvidas e problemas de clientes por chat, telefone ou e-mail, muitas vezes de casa.", form:"Sem formação obrigatória; dá para começar em semanas", rx:{S:3,C:2,E:1}, pre:["pessoas","remoto","curto","estab","rotina","ajudar","executar"], con:["individual"], ent:"curto", inv:0, fac:false, rem:2, renda:"fixa",
+   teste:"Ajude um pequeno negócio a responder clientes no WhatsApp por 2 semanas e repare se resolver problemas dos outros te dá energia.", passo:"Procure 5 vagas de atendimento remoto e anote o que pedem."},
+  {id:"ux", nome:"UX e produto digital", desc:"Desenhar apps e sites fáceis de usar, ouvindo quem usa e testando ideias.", form:"Cursos de 6 a 12 meses ou tecnólogo; portfólio vale mais que diploma", rx:{A:3,I:3,E:1}, pre:["mente","criar","remoto","bastidor","dinheiro"], con:["maos"], ent:"medio", inv:1, fac:false, rem:2, renda:"fixa",
+   teste:"Faça um curso gratuito de UX ou Figma, escolha um app que você usa e redesenhe uma tela, mostrando o antes e o depois para 3 pessoas.", passo:"Liste 3 apps que te irritam e escreva o que exatamente incomoda em cada um."},
+  {id:"idi", nome:"Idiomas e tradução", desc:"Traduzir textos, legendar vídeos ou dar aulas de outra língua, muitas vezes de casa.", form:"Exige fluência; cursos e certificados ajudam", rx:{A:2,I:2,C:2,S:1}, pre:["remoto","individual","mente","negocio","bastidor"], con:["maos"], ent:"medio", inv:1, fac:false, rem:2, renda:"ambas",
+   teste:"Traduza ou legende um texto ou vídeo curto por semana durante 30 dias, ou dê uma aula de conversação para alguém.", passo:"Faça um teste de nível gratuito no idioma que você domina melhor."},
+  {id:"mus", nome:"Música e áudio", desc:"Tocar, cantar, produzir, dar aulas ou cuidar do som em eventos, estúdios e podcasts.", form:"Cursos livres, conservatório ou faculdade; a prática conta mais", rx:{A:3,E:2,R:1,S:1}, pre:["criar","visivel","variavel","negocio","variedade","proposito"], con:["estab","rotina"], ent:"medio", inv:2, fac:false, rem:1, renda:"variavel",
+   teste:"Grave e publique 1 música, cover ou edição de áudio por semana, ou ofereça para cuidar do som de um evento pequeno.", passo:"Liste o que você já sabe fazer em música e o que precisaria aprender para cobrar por isso."},
+  {id:"cie", nome:"Ciência e pesquisa", desc:"Investigar a natureza, a saúde ou a tecnologia em universidades, laboratórios e institutos.", form:"Faculdade (4 a 5 anos), em geral seguida de mestrado e doutorado", rx:{I:3,R:2,C:1}, pre:["mente","longo","proposito","bastidor","individual"], con:["curto"], ent:"longo", inv:2, fac:true, rem:0, renda:"fixa",
+   teste:"Faça um curso online gratuito de uma universidade, leia 2 textos de divulgação científica por semana e converse com alguém que faz pesquisa.", passo:"Escolha uma pergunta que te intriga e procure o que a ciência já sabe sobre ela."},
+  {id:"pet", nome:"Serviços para pets", desc:"Banho e tosa, adestramento, creche e passeios com cães e gatos.", form:"Cursos livres, de semanas a meses", rx:{R:3,S:2,E:2}, pre:["maos","negocio","curto","variavel","presencial","ajudar"], con:["remoto"], ent:"curto", inv:1, fac:false, rem:0, renda:"variavel",
+   teste:"Cuide ou passeie com os pets de 3 pessoas conhecidas por um mês e anote quanto cobraria e do que mais gostou.", passo:"Pergunte a 5 pessoas que têm cachorro ou gato por qual serviço pagariam sem pensar duas vezes."},
+  {id:"agr", nome:"Agro e campo", desc:"Produzir alimentos, cuidar de lavouras e criações e trabalhar no agronegócio.", form:"Técnico em agropecuária (cerca de 2 anos) ou agronomia (5 anos)", rx:{R:3,I:2,E:2,C:1}, pre:["maos","presencial","mudar","variedade","dinheiro"], con:["remoto"], ent:"medio", inv:2, fac:false, rem:0, renda:"ambas",
+   teste:"Passe alguns dias numa propriedade rural ou cooperativa e faça um curso gratuito do Senar sobre o tema que mais te atrai.", passo:"Descubra quais escolas técnicas ou faculdades de agro existem na sua região e o que o mercado local mais procura."},
+  {id:"mas", nome:"Massoterapia e terapias corporais", desc:"Aliviar dores e tensões com massagem, drenagem e outras técnicas manuais.", form:"Cursos livres ou técnico em massoterapia (cerca de 1 ano e meio)", rx:{S:3,R:3,A:1}, pre:["maos","pessoas","ajudar","negocio","curto","presencial"], con:["remoto"], ent:"curto", inv:1, fac:false, rem:0, renda:"variavel",
+   teste:"Faça um curso curto de massagem relaxante e atenda 5 pessoas conhecidas, anotando como cada uma se sentiu e como você se sentiu.", passo:"Pesquise cursos de massoterapia na sua cidade e quanto se cobra por sessão."},
+  {id:"cui", nome:"Cuidado de idosos e crianças", desc:"Acompanhar e cuidar de pessoas idosas, crianças ou pessoas com deficiência, em casas e instituições.", form:"Cursos de cuidados com pessoas idosas ou crianças, de semanas a meses", rx:{S:3,R:2,C:1}, pre:["ajudar","pessoas","presencial","proposito","curto","rotina"], con:["remoto"], ent:"curto", inv:0, fac:false, rem:0, renda:"ambas",
+   teste:"Faça um curso de cuidados com pessoas idosas ou de primeiros socorros e ajude a cuidar de alguém da família ou da vizinhança algumas horas por semana, durante um mês.", passo:"Converse com alguém que trabalha cuidando de pessoas idosas ou de crianças sobre a rotina e o salário."},
+  {id:"tst", nome:"Segurança do trabalho", desc:"Prevenir acidentes e doenças em obras, fábricas e empresas, fiscalizando e treinando equipes.", form:"Técnico (cerca de 1 ano e meio) ou especialização em engenharia", rx:{C:3,R:2,I:2,S:1}, pre:["estab","presencial","executar","rotina"], con:["remoto"], ent:"medio", inv:1, fac:false, rem:0, renda:"fixa",
+   teste:"Faça um curso gratuito sobre as normas de segurança (NRs) e observe os riscos do seu trabalho ou de uma obra perto de você, listando o que mudaria.", passo:"Pesquise o curso técnico em segurança do trabalho mais próximo: duração, preço e procura na região."},
+  {id:"game", nome:"Games e animação", desc:"Criar jogos, personagens, animações e efeitos visuais.", form:"Cursos livres ou tecnólogo; portfólio é o que conta", rx:{A:3,I:2,R:1}, pre:["criar","remoto","mente","individual","bastidor"], con:["pessoas"], ent:"medio", inv:1, fac:false, rem:2, renda:"ambas",
+   teste:"Faça um curso gratuito de criação de jogos ou de animação e termine um projeto pequeno do começo ao fim em 30 dias.", passo:"Escolha um programa gratuito, como Blender ou Godot, e siga o primeiro tutorial completo."},
+  {id:"var", nome:"Comércio e varejo", desc:"Atender, vender e gerenciar lojas, supermercados e redes de varejo.", form:"Sem formação obrigatória; dá para crescer até a gerência", rx:{E:3,S:2,C:2}, pre:["pessoas","presencial","curto","lider","estab","variedade"], con:["remoto","individual"], ent:"curto", inv:0, fac:false, rem:0, renda:"fixa",
+   teste:"Ajude na loja de pessoas conhecidas em 4 fins de semana de movimento e repare se gosta do ritmo e do contato com clientes.", passo:"Converse com quem gerencia uma loja que você frequenta sobre como chegou até ali."}
 ];
 
 const CRIT = ["Me deu energia", "Tenho jeito para isso", "Cabe na minha vida", "Me vejo nisso em 5 anos"];
@@ -474,9 +534,9 @@ function renderIntro(){
     <div class="sample">
       <span class="kicker">Exemplo de resultado</span>
       <span class="letters">S · A · E</span>
-      <span class="small">Social, Artística e Empreendedora, com os caminhos que mais combinam e um plano de 30 dias.</span>
+      <span class="small">Social, Artístico e Empreendedor, com os caminhos que mais combinam entre ${PATHS.length} opções e um plano de 30 dias.</span>
     </div>
-    <label class="f" for="nm">Como você quer ser chamada?
+    <label class="f" for="nm">Como podemos te chamar?
       <input class="input" id="nm" type="text" autocomplete="given-name" maxlength="40" placeholder="Seu nome" value="${esc(S.name)}">
     </label>
     ${started
@@ -693,19 +753,31 @@ function scorePaths(){
 function ranked(){ return scorePaths().sort((a, b) => b.total - a.total); }
 
 /* ---------- Resultado ---------- */
+function pathBody(r){
+  const p = r.p, picked = S.picks.includes(p.id);
+  return `<p>${esc(p.desc)}</p>
+    <p class="small">Formação: ${esc(p.form)}</p>
+    <div class="tags">${r.reasons.map(x => `<span class="tag">${esc(x)}</span>`).join("")}${r.warns.map(x => `<span class="tag warn">${esc(x)}</span>`).join("")}</div>
+    <details id="ct-${p.id}"><summary>Como testar em 30 dias</summary>
+      <p><b>Experimento</b>${esc(p.teste)}</p>
+      <p><b>Primeiro passo nesta semana</b>${esc(p.passo)}</p>
+    </details>
+    <button class="pick" data-a="pick" data-id="${p.id}" aria-pressed="${picked}">${picked ? "Vou testar este" : "Quero testar este"}</button>`;
+}
 function pathCard(r, n){
   const p = r.p, picked = S.picks.includes(p.id);
   return `<article class="path ${picked ? "picked" : ""}" id="p-${p.id}">
     <div class="ph"><div><span class="rank">#${n}</span><h3>${esc(p.nome)}</h3></div><span class="aff">${r.aff}% afinidade</span></div>
-    <p>${esc(p.desc)}</p>
-    <p class="small">Formação: ${esc(p.form)}</p>
-    <div class="tags">${r.reasons.map(x => `<span class="tag">${esc(x)}</span>`).join("")}${r.warns.map(x => `<span class="tag warn">${esc(x)}</span>`).join("")}</div>
-    <details><summary>Como testar em 30 dias</summary>
-      <p><b>Experimento</b>${esc(p.teste)}</p>
-      <p><b>Primeiro passo nesta semana</b>${esc(p.passo)}</p>
-    </details>
-    <button class="pick" data-a="pick" data-id="${p.id}" aria-pressed="${picked}">${picked ? "Vou testar este" : "Quero testar este"}</button>
+    ${pathBody(r)}
   </article>`;
+}
+/* Fora dos 6 primeiros: uma linha por caminho, que abre ao tocar. */
+function pathMini(r, n){
+  const p = r.p, picked = S.picks.includes(p.id);
+  return `<details class="mini ${picked ? "picked" : ""}" id="p-${p.id}" ${picked ? "open" : ""}>
+    <summary><span class="mrank">#${n}</span><span class="mname">${esc(p.nome)}</span><span class="aff">${r.aff}%</span></summary>
+    <div class="mbody">${pathBody(r)}</div>
+  </details>`;
 }
 function planTasks(picks){
   const P = picks.map(id => PATHS.find(p => p.id === id)).filter(Boolean);
@@ -749,7 +821,7 @@ function renderRes(){
     <canvas id="topo" aria-hidden="true"></canvas>
     <p class="kicker">${S.name ? esc(S.name) + ", seu" : "Seu"} código de interesses</p>
     <div class="code" aria-label="Código ${code.join(" ")}">${code.map((t, k) => `${k ? "<i>·</i>" : ""}<span style="color:var(--t-${t})">${t}</span>`).join("")}</div>
-    <p class="lead">Você é principalmente <b>${TYPES[code[0]].nome}</b>, <b>${TYPES[code[1]].nome}</b> e <b>${TYPES[code[2]].nome}</b>. Esse é o seu código Holland (RIASEC), o modelo mais usado em orientação profissional.</p>
+    <p class="lead">Seu perfil é principalmente <b>${TYPES[code[0]].nome}</b>, <b>${TYPES[code[1]].nome}</b> e <b>${TYPES[code[2]].nome}</b>. Esse é o seu código Holland (RIASEC), o modelo mais usado em orientação profissional.</p>
   </section>
 
   <section class="card sec">
@@ -767,11 +839,11 @@ function renderRes(){
   <section class="sec">
     <div class="card sec" style="gap:8px">
       <p class="kicker">Marco 3</p><h2>Caminhos com mais afinidade</h2>
-      <p class="small">Somam seus interesses (60%), suas escolhas (30%) e o quanto cabem na sua realidade hoje. Escolha 2 ou 3 para testar. Já marcamos os 2 primeiros.</p>
+      <p class="small">Comparamos ${PATHS.length} caminhos somando seus interesses (60%), suas escolhas (30%) e o quanto cabem na sua realidade hoje. Escolha 2 ou 3 para testar. Já marcamos os 2 primeiros.</p>
     </div>
     ${top6.map((r, k) => pathCard(r, k + 1)).join("")}
-    <div class="card"><details class="more"><summary>Ver os outros ${rest.length} caminhos</summary>
-      <div class="sec" style="margin-top:14px">${rest.map((r, k) => pathCard(r, k + 7)).join("")}</div>
+    <div class="card"><details class="more" id="more" ${rest.some(r => S.picks.includes(r.p.id)) ? "open" : ""}><summary>Ver os outros ${rest.length} caminhos</summary>
+      <div class="minis">${rest.map((r, k) => pathMini(r, k + 7)).join("")}</div>
     </details></div>
   </section>
 
@@ -806,7 +878,7 @@ function renderRes(){
     <textarea class="copybox" id="copybox" readonly hidden aria-label="Resumo do resultado"></textarea>
     <p class="small">Cole no WhatsApp para conversar com alguém, ou numa conversa com o Claude para aprofundar a análise.</p>
     <div class="nav"><button class="link" data-a="review">Revisar respostas</button><button class="link" data-a="redo" id="redo">Refazer do zero</button></div>
-    <p class="note">Isto não é um diagnóstico. É um ponto de partida baseado no modelo de interesses de Holland e em métodos de design de vida. Se quiser ir mais fundo, um psicólogo de orientação profissional pode ajudar.</p>
+    <p class="note">Isto não é um diagnóstico. É um ponto de partida baseado no modelo de interesses de Holland e em métodos de design de vida. Se quiser ir mais fundo, vale buscar orientação profissional com acompanhamento psicológico.</p>
   </section>`;
   const wa = document.getElementById("wa"); if(wa) wa.href = "https://wa.me/?text=" + encodeURIComponent(summaryText(true) + "\n\nFaça o teste também: " + location.href.split("#")[0]);
   drawTopo(document.getElementById("topo"), true);
@@ -858,7 +930,11 @@ function resAction(a, b){
       S.picks.push(id);
     }
     save();
-    const y = window.scrollY; renderRes(); window.scrollTo(0, y);
+    // Redesenha mantendo abertas as partes que a pessoa tinha aberto.
+    const open = [...app.querySelectorAll("details[open][id]")].map(d => d.id);
+    const y = window.scrollY; renderRes();
+    open.forEach(id => { const d = document.getElementById(id); if(d) d.open = true; });
+    window.scrollTo(0, y);
     toast(k >= 0 ? "Removido do plano" : "Adicionado ao plano de 30 dias");
   } else if(a === "copy"){
     const txt = summaryText();
