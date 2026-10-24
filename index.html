@@ -223,6 +223,25 @@ details.mini[open]>summary::after{content:"\2212"}
 .copybox{width:100%;min-height:180px;font:13px/1.45 var(--f-mono)}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:12px;font-weight:700;z-index:20;max-width:calc(100% - 32px)}
 .more{border-top:0;padding-top:0}
+.hero .btn{align-self:flex-start}
+#sharesec{scroll-margin-top:110px}
+.shareprev{display:flex;justify-content:center}
+.shareprev img{width:min(62%,260px);height:auto;border-radius:14px;border:1px solid var(--line);background:var(--line);box-shadow:var(--shadow);display:block}
+.print-only{display:none}
+/* PDF / impressão: tema claro, sem botões, só o que interessa ler no papel */
+@media print{
+  :root:root:root{--bg:#fff;--paper:#fff;--ink:#15241E;--muted:#56675E;--line:#C9D5CB;--accent:#1D6A4F;--accent-ink:#F6FBF8;--accent-soft:#D9EADF;--marker:#D5960A;--marker-soft:#F7E6B8;--marker-ink:#3D2A00;--warn:#8A5200;--warn-soft:#FBEBCB;--contour:rgba(29,106,79,.17);--t-R:#A65A2A;--t-I:#2C5D9C;--t-A:#A93C83;--t-S:#2A8664;--t-E:#B07804;--t-C:#5A55A0;--shadow:none;color-scheme:light}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff;font-size:12pt}
+  body::before,.top,.toast,.btn,.link,.pick,.nav,.noprint,#sharesec{display:none!important}
+  .wrap{max-width:none;padding:0;gap:12px}
+  .card,.hero,.path,.week,.mx{box-shadow:none}
+  .path,.week,.mx,.type,.brow,.qa div,.verdict{break-inside:avoid}
+  .sec h2,.ph,.kicker{break-after:avoid}
+  summary{list-style:none;color:var(--ink)}
+  summary::-webkit-details-marker{display:none}
+  .print-only{display:block}
+}
 [tabindex="-1"]:focus{outline:none}
 @media (max-width:420px){.wp span{font-size:9px;letter-spacing:.02em}}
 @media (max-width:400px){.brow{grid-template-columns:108px 1fr 40px}.brow .nm{font-size:14px}.crit{grid-template-columns:1fr 80px 20px}}
@@ -822,6 +841,7 @@ function renderRes(){
     <p class="kicker">${S.name ? esc(S.name) + ", seu" : "Seu"} código de interesses</p>
     <div class="code" aria-label="Código ${code.join(" ")}">${code.map((t, k) => `${k ? "<i>·</i>" : ""}<span style="color:var(--t-${t})">${t}</span>`).join("")}</div>
     <p class="lead">Seu perfil é principalmente <b>${TYPES[code[0]].nome}</b>, <b>${TYPES[code[1]].nome}</b> e <b>${TYPES[code[2]].nome}</b>. Esse é o seu código Holland (RIASEC), o modelo mais usado em orientação profissional.</p>
+    <button class="btn ghost" data-a="toshare">Compartilhar meu resultado</button>
   </section>
 
   <section class="card sec">
@@ -842,7 +862,7 @@ function renderRes(){
       <p class="small">Comparamos ${PATHS.length} caminhos somando seus interesses (60%), suas escolhas (30%) e o quanto cabem na sua realidade hoje. Escolha 2 ou 3 para testar. Já marcamos os 2 primeiros.</p>
     </div>
     ${top6.map((r, k) => pathCard(r, k + 1)).join("")}
-    <div class="card"><details class="more" id="more" ${rest.some(r => S.picks.includes(r.p.id)) ? "open" : ""}><summary>Ver os outros ${rest.length} caminhos</summary>
+    <div class="card noprint"><details class="more" id="more" ${rest.some(r => S.picks.includes(r.p.id)) ? "open" : ""}><summary>Ver os outros ${rest.length} caminhos</summary>
       <div class="minis">${rest.map((r, k) => pathMini(r, k + 7)).join("")}</div>
     </details></div>
   </section>
@@ -872,16 +892,28 @@ function renderRes(){
     <ol class="ask">${ASK.map(q => `<li>${esc(q)}</li>`).join("")}</ol>
   </section>
 
+  <section class="card sec" id="sharesec">
+    <p class="kicker">Compartilhe</p><h2>Seu resultado em imagem</h2>
+    <div class="shareprev"><img id="shareprev" alt="" width="1080" height="1920"></div>
+    <p class="small">No formato dos stories do Instagram e do status do WhatsApp. Mostra seu código, seu perfil e os 3 caminhos com mais afinidade. Suas reflexões e sua realidade não aparecem.</p>
+    ${CAN_SHARE_FILES
+      ? `<button class="btn wide" data-a="shareimg">Compartilhar imagem</button><button class="btn ghost wide" data-a="saveimg">Baixar imagem</button>`
+      : `<button class="btn wide" data-a="saveimg">Baixar imagem</button>`}
+  </section>
+
   <section class="card sec">
     <a class="btn wide" id="wa" href="https://wa.me/" target="_blank" rel="noopener">Enviar resultado pelo WhatsApp</a>
     <button class="btn ghost wide" data-a="copy">Copiar resumo do resultado</button>
+    <button class="btn ghost wide" data-a="pdf">Salvar em PDF ou imprimir</button>
     <textarea class="copybox" id="copybox" readonly hidden aria-label="Resumo do resultado"></textarea>
-    <p class="small">Cole no WhatsApp para conversar com alguém, ou numa conversa com o Claude para aprofundar a análise.</p>
+    <p class="small noprint">Cole no WhatsApp para conversar com alguém, ou numa conversa com o Claude para aprofundar a análise.</p>
+    <p class="small print-only">Resultado de ${esc(S.name || "quem fez o teste")} em ${new Date().toLocaleDateString("pt-BR")} · Qual é o meu rumo? · ${esc(siteUrl())}</p>
     <div class="nav"><button class="link" data-a="review">Revisar respostas</button><button class="link" data-a="redo" id="redo">Refazer do zero</button></div>
     <p class="note">Isto não é um diagnóstico. É um ponto de partida baseado no modelo de interesses de Holland e em métodos de design de vida. Se quiser ir mais fundo, vale buscar orientação profissional com acompanhamento psicológico.</p>
   </section>`;
   const wa = document.getElementById("wa"); if(wa) wa.href = "https://wa.me/?text=" + encodeURIComponent(summaryText(true) + "\n\nFaça o teste também: " + location.href.split("#")[0]);
   drawTopo(document.getElementById("topo"), true);
+  prepShare();
 }
 function updateMatrix(){
   const t = matrixTotals().sort((a, b) => b.sum - a.sum);
@@ -943,6 +975,14 @@ function resAction(a, b){
       if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(() => toast("Resumo copiado"), fallback);
       else fallback();
     }catch(err){ fallback(); }
+  } else if(a === "toshare"){
+    const s = document.getElementById("sharesec"); if(s) s.scrollIntoView({behavior:"smooth", block:"start"});
+  } else if(a === "shareimg"){
+    shareImage();
+  } else if(a === "saveimg"){
+    saveImage();
+  } else if(a === "pdf"){
+    openForPrint(); window.print();
   } else if(a === "review"){
     go("int", 0);
   } else if(a === "redo"){
@@ -962,6 +1002,162 @@ function resInput(e){
     updateMatrix();
   }
 }
+
+/* ---------- Imagem para compartilhar (stories, 1080×1920) ---------- */
+/* Cores fixas do tema claro: a imagem sai igual em qualquer aparelho. Só mostra código, perfil e 3 caminhos. */
+const SC = {bg:"#EDF2EC", paper:"#F9FBF7", ink:"#15241E", muted:"#56675E", line:"#C9D5CB", accent:"#1D6A4F", accentInk:"#F6FBF8",
+  marker:"#D5960A", markerSoft:"#F7E6B8", markerInk:"#3D2A00", contour:"rgba(29,106,79,.16)"};
+const SC_T = {R:"#A65A2A", I:"#2C5D9C", A:"#A93C83", S:"#2A8664", E:"#B07804", C:"#5A55A0"};
+const F_D = '"Big Shoulders Display","Arial Narrow",sans-serif';
+const F_B = '"Atkinson Hyperlegible",system-ui,sans-serif';
+const F_M = '"IBM Plex Mono",ui-monospace,monospace';
+const CAN_SHARE_FILES = (() => {
+  try{ return !!(navigator.canShare && navigator.canShare({files:[new File([new Blob(["x"])], "a.png", {type:"image/png"})]})); }
+  catch(e){ return false; }
+})();
+let shareImg = {key:"", blob:null, url:"", name:""};
+
+function siteUrl(){ const l = document.querySelector('link[rel="canonical"]'); return l ? l.href : location.href.split("#")[0]; }
+function shareData(){
+  const pct = typeScores();
+  return {name:S.name, code:codeOf(pct), pct, top:ranked().slice(0, 3).map(r => ({nome:r.p.nome, aff:r.aff}))};
+}
+function fontsReady(){
+  if(!document.fonts || !document.fonts.load) return Promise.resolve();
+  return Promise.all([`800 100px ${F_D}`, `700 40px ${F_B}`, `400 40px ${F_B}`, `600 30px ${F_M}`, `500 30px ${F_M}`]
+    .map(f => document.fonts.load(f).catch(() => {})));
+}
+// Diminui a fonte até o texto caber na largura.
+function fitText(c, text, weight, fam, size, min, maxW){
+  let s = size;
+  for(;;){ c.font = `${weight} ${s}px ${fam}`; if(s <= min || c.measureText(text).width <= maxW) return s; s -= 2; }
+}
+function track(c, px){ if("letterSpacing" in c) c.letterSpacing = px + "px"; }
+function rrect(c, x, y, w, h, r){
+  c.beginPath(); c.moveTo(x + r, y);
+  c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r);
+  c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath();
+}
+function drawShare(c, d){
+  const W = 1080, H = 1920, M = 96, CW = W - 2 * M;
+  c.fillStyle = SC.bg; c.fillRect(0, 0, W, H);
+  // Curvas de nível e bandeira no cume
+  const cx = W * 0.8, cy = 160, step = 62;
+  c.strokeStyle = SC.contour;
+  for(let k = 1; k <= 38; k++){
+    c.lineWidth = k % 5 === 0 ? 4 : 2;
+    c.beginPath();
+    for(let s = 0; s <= 220; s++){
+      const a = s / 220 * Math.PI * 2;
+      const wob = 1 + 0.13 * Math.sin(3 * a + k * 0.55) + 0.07 * Math.sin(5 * a - k * 0.35) + 0.04 * Math.cos(7 * a + k * 0.9);
+      const x = cx + Math.cos(a) * k * step * wob * 1.3, y = cy + Math.sin(a) * k * step * wob * 0.85;
+      s ? c.lineTo(x, y) : c.moveTo(x, y);
+    }
+    c.closePath(); c.stroke();
+  }
+  c.strokeStyle = SC.marker; c.fillStyle = SC.marker; c.lineWidth = 8; c.lineCap = "round";
+  c.beginPath(); c.moveTo(cx, cy + 44); c.lineTo(cx, cy - 76); c.stroke();
+  c.beginPath(); c.moveTo(cx, cy - 76); c.lineTo(cx + 66, cy - 52); c.lineTo(cx, cy - 28); c.closePath(); c.fill();
+  c.beginPath(); c.arc(cx, cy + 44, 11, 0, Math.PI * 2); c.fill();
+
+  c.textAlign = "left"; c.textBaseline = "alphabetic";
+  // Rótulo
+  const label = n => ((n ? n + " · " : "") + "Meu código de interesses").toUpperCase();
+  track(c, 5); c.fillStyle = SC.muted;
+  let nm0 = (d.name || "").trim(), kick = label(nm0);
+  if(fitText(c, kick, 600, F_M, 32, 24, CW) <= 24 && c.measureText(kick).width > CW){
+    nm0 = nm0.split(/\s+/)[0]; kick = label(nm0);
+    while(nm0.length > 1 && fitText(c, kick, 600, F_M, 32, 24, CW) <= 24 && c.measureText(kick).width > CW){ nm0 = nm0.slice(0, -1); kick = label(nm0 + "…"); }
+  }
+  c.fillText(kick, M, 290);
+  track(c, 0);
+  // Código de 3 letras
+  let x = M - 6;
+  d.code.forEach((t, k) => {
+    if(k){ c.font = `800 120px ${F_D}`; c.fillStyle = SC.line; x += 18; c.fillText("·", x, 505); x += c.measureText("·").width + 18; }
+    c.font = `800 300px ${F_D}`; c.fillStyle = SC_T[t]; c.fillText(t, x, 555); x += c.measureText(t).width;
+  });
+  const names = d.code.map(t => TYPES[t].nome).join(" · ");
+  c.fillStyle = SC.ink; fitText(c, names, 700, F_B, 50, 30, CW); c.fillText(names, M, 632);
+
+  // Cartão com perfil e caminhos
+  const PX = 64, PW = W - 128, PY = 680, PH = 790, IX = PX + 48, IW = PW - 96;
+  c.fillStyle = SC.paper; rrect(c, PX, PY, PW, PH, 36); c.fill();
+  c.strokeStyle = SC.line; c.lineWidth = 3; c.stroke();
+  [...TORDER].sort((a, b) => d.pct[b] - d.pct[a]).forEach((t, k) => {
+    const y = PY + 82 + k * 58, bx = IX + 280, bw = IW - 280 - 100;
+    c.fillStyle = SC.ink; fitText(c, TYPES[t].nome, 700, F_B, 34, 26, 262); c.fillText(TYPES[t].nome, IX, y);
+    c.fillStyle = SC.line; rrect(c, bx, y - 24, bw, 22, 11); c.fill();
+    if(d.pct[t] > 0){ c.fillStyle = SC_T[t]; rrect(c, bx, y - 24, Math.max(22, bw * d.pct[t] / 100), 22, 11); c.fill(); }
+    c.font = `600 30px ${F_M}`; c.fillStyle = SC.ink; c.textAlign = "right"; c.fillText(d.pct[t] + "%", IX + IW, y); c.textAlign = "left";
+  });
+  const dy = PY + 82 + 5 * 58 + 44;
+  c.strokeStyle = SC.line; c.lineWidth = 2; c.beginPath(); c.moveTo(IX, dy); c.lineTo(IX + IW, dy); c.stroke();
+  track(c, 4); c.fillStyle = SC.muted; c.font = `600 28px ${F_M}`; c.fillText("CAMINHOS COM MAIS AFINIDADE", IX, dy + 62); track(c, 0);
+  const pathW = IW - 56 - 160;
+  const pathSize = Math.min(...d.top.map(p => fitText(c, p.nome.toUpperCase(), 800, F_D, 62, 34, pathW)));
+  d.top.forEach((p, k) => {
+    const y = dy + 146 + k * 90;
+    c.fillStyle = SC.muted; c.font = `600 30px ${F_M}`; c.fillText(String(k + 1), IX, y);
+    const nm = p.nome.toUpperCase();
+    c.fillStyle = SC.ink; c.font = `800 ${pathSize}px ${F_D}`; c.fillText(nm, IX + 56, y);
+    const pw = 136, ph = 56, px = IX + IW - pw;
+    c.fillStyle = SC.markerSoft; rrect(c, px, y - 42, pw, ph, 28); c.fill();
+    c.fillStyle = SC.markerInk; c.font = `600 30px ${F_M}`; c.textAlign = "center"; c.fillText(p.aff + "%", px + pw / 2, y - 3); c.textAlign = "left";
+  });
+
+  // Chamada para fazer o teste
+  const CY = PY + PH + 30, CH = 150;
+  c.fillStyle = SC.accent; rrect(c, PX, CY, PW, CH, 30); c.fill();
+  c.fillStyle = SC.accentInk; c.textAlign = "center";
+  c.font = `700 50px ${F_B}`; c.fillText("Descubra o seu rumo", W / 2, CY + 68);
+  const url = siteUrl().replace(/^https?:\/\//, "").replace(/\/$/, "");
+  c.globalAlpha = 0.85; fitText(c, url, 500, F_M, 30, 18, PW - 80); c.fillText(url, W / 2, CY + 118); c.globalAlpha = 1;
+  c.textAlign = "left";
+}
+async function buildShare(d){
+  await fontsReady();
+  const cv = document.createElement("canvas"); cv.width = 1080; cv.height = 1920;
+  drawShare(cv.getContext("2d"), d);
+  return new Promise((ok, no) => cv.toBlob(b => b ? ok(b) : no(new Error("toBlob")), "image/png"));
+}
+// Cria a imagem assim que o resultado aparece, para o toque em "Compartilhar" abrir o menu na hora.
+function prepShare(){
+  if(!document.getElementById("shareprev")) return;
+  const d = shareData(), key = JSON.stringify(d);
+  const show = () => { const im = document.getElementById("shareprev"); if(im && shareImg.key === key){ im.src = shareImg.url; im.alt = "Prévia da imagem do seu resultado"; } };
+  if(shareImg.key === key && shareImg.url){ show(); return; }
+  buildShare(d).then(blob => {
+    if(shareImg.url) URL.revokeObjectURL(shareImg.url);
+    shareImg = {key, blob, url:URL.createObjectURL(blob), name:`meu-rumo-${d.code.join("")}.png`};
+    show();
+  }).catch(() => { const s = document.getElementById("sharesec"); if(s) s.hidden = true; });
+}
+function saveImage(){
+  if(!shareImg.blob){ toast("A imagem ainda está sendo criada"); return; }
+  const a = document.createElement("a"); a.href = shareImg.url; a.download = shareImg.name;
+  document.body.appendChild(a); a.click(); a.remove();
+  toast("Imagem baixada");
+}
+function shareImage(){
+  if(!shareImg.blob){ toast("A imagem ainda está sendo criada"); return; }
+  let file = null;
+  try{ file = new File([shareImg.blob], shareImg.name, {type:"image/png"}); }catch(e){}
+  // Só o arquivo, sem texto: no iPhone, mandar texto junto esconde o Instagram do menu.
+  if(file && CAN_SHARE_FILES && navigator.canShare({files:[file]})){
+    navigator.share({files:[file]}).catch(err => { if(!err || err.name !== "AbortError") saveImage(); });
+  } else saveImage();
+}
+
+/* ---------- PDF / impressão ---------- */
+// Abre "Como testar em 30 dias" dos 6 primeiros caminhos para sair no papel; fecha de novo depois.
+let printOpened = [];
+function openForPrint(){
+  if(S.step !== "res") return;
+  app.querySelectorAll(".path details:not([open])").forEach(d => { d.open = true; printOpened.push(d); });
+}
+window.addEventListener("beforeprint", openForPrint);
+window.addEventListener("afterprint", () => { printOpened.forEach(d => { d.open = false; }); printOpened = []; });
 
 /* ---------- Relevo (curvas de nível) ---------- */
 function drawTopo(cv, summit){

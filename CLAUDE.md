@@ -18,7 +18,7 @@ Fluxo: abertura → 4 etapas → resultado.
 3. **Realidade** (`REAL`): trabalho, renda, horas, dinheiro para investir, estudo, faculdade e prazo.
 4. **Reflexão** (`REFL`): 6 perguntas abertas e opcionais.
 
-Resultado: código RIASEC (3 letras), barras por tipo, preferências escolhidas, caminhos ordenados por afinidade (os 6 primeiros em cartão completo; os outros numa lista compacta que abre ao tocar), plano de 30 dias, placar de decisão (`CRIT`, notas de 1 a 5), perguntas para conversar (`ASK`), botão de WhatsApp e botão para copiar o resumo.
+Resultado: código RIASEC (3 letras), barras por tipo, preferências escolhidas, caminhos ordenados por afinidade (os 6 primeiros em cartão completo; os outros numa lista compacta que abre ao tocar), plano de 30 dias, placar de decisão (`CRIT`, notas de 1 a 5), perguntas para conversar (`ASK`), imagem para compartilhar, botão de WhatsApp, botão para copiar o resumo e botão de PDF.
 
 ### Pontuação dos caminhos (`scorePaths`)
 
@@ -33,6 +33,11 @@ Ao criar um caminho: use só chaves que existem em `DIMS`, nunca coloque em `pre
 Total = 60% interesses + 30% preferências + 10% fixo − penalidades de realidade (faculdade indesejada, prazo curto, falta de dinheiro, renda variável). A afinidade exibida fica entre 18% e 97%.
 
 Atenção: se mudar a quantidade de itens em `ITEMS`, `PAIRS` ou `REFL`, as respostas salvas no aparelho das pessoas são zeradas (veja `init`). Para mudanças grandes, troque a chave `rumo-v1`.
+
+### Compartilhar e PDF
+
+- **Imagem** (`drawShare`): 1080×1920, formato dos stories e do status do WhatsApp. É desenhada em canvas no próprio aparelho, com as cores do tema claro fixas em `SC`/`SC_T`. Mostra nome (se houver), código, barras e os 3 primeiros caminhos; nunca as reflexões nem a realidade. O endereço no rodapé vem da tag `canonical`. A imagem é criada assim que o resultado aparece (`prepShare`), para o toque em "Compartilhar" abrir o menu do celular na hora. Onde não há menu de compartilhar (computador), o botão baixa o PNG. O compartilhamento manda só o arquivo, sem texto: no iPhone, texto junto esconde o Instagram do menu.
+- **PDF**: botão "Salvar em PDF ou imprimir" chama `window.print()`. O CSS de `@media print` força o tema claro, esconde botões e a lista compacta, e `openForPrint` abre o "Como testar" dos 6 primeiros caminhos.
 
 ## Visual
 
