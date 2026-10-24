@@ -18,15 +18,17 @@ Fluxo: abertura → 4 etapas → resultado.
 3. **Realidade** (`REAL`): trabalho, renda, horas, dinheiro para investir, estudo, faculdade e prazo.
 4. **Reflexão** (`REFL`): 6 perguntas abertas e opcionais.
 
-Resultado: código RIASEC (3 letras), barras por tipo, preferências escolhidas, caminhos ordenados por afinidade, plano de 30 dias, placar de decisão (`CRIT`, notas de 1 a 5), perguntas para conversar (`ASK`), botão de WhatsApp e botão para copiar o resumo.
+Resultado: código RIASEC (3 letras), barras por tipo, preferências escolhidas, caminhos ordenados por afinidade (os 6 primeiros em cartão completo; os outros numa lista compacta que abre ao tocar), plano de 30 dias, placar de decisão (`CRIT`, notas de 1 a 5), perguntas para conversar (`ASK`), botão de WhatsApp e botão para copiar o resumo.
 
 ### Pontuação dos caminhos (`scorePaths`)
 
-Cada caminho em `PATHS` tem:
+São 51 caminhos em `PATHS`. Cada um tem:
 - `rx`: peso de cada tipo RIASEC (0 a 3);
 - `pre` / `con`: preferências que combinam ou conflitam;
 - `ent` (curto, medio, longo), `inv` (investimento de 0 a 3), `fac` (exige faculdade), `rem` (remoto de 0 a 2), `renda` (fixa, variavel, ambas);
 - `teste` e `passo`: o experimento de 30 dias e o primeiro passo.
+
+Ao criar um caminho: use só chaves que existem em `DIMS`, nunca coloque em `pre` duas preferências opostas (veja `OPP`) e use um `id` novo, porque os ids ficam salvos no aparelho (`picks`, `sc`, `done`). Adicionar caminhos não apaga as respostas salvas.
 
 Total = 60% interesses + 30% preferências + 10% fixo − penalidades de realidade (faculdade indesejada, prazo curto, falta de dinheiro, renda variável). A afinidade exibida fica entre 18% e 97%.
 
