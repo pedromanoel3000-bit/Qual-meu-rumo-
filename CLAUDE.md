@@ -5,6 +5,7 @@ Teste gratuito de orientação profissional, em português do Brasil, pensado pa
 - Site no ar: https://pedromanoel3000-bit.github.io/Qual-meu-rumo-/
 - Responda e escreva sempre em português do Brasil, de forma direta.
 - O Pedro prefere aprovar cada parte antes de seguir para a próxima.
+- Linguagem neutra: o texto não marca o gênero de quem faz o teste. Prefira substantivos e frases sem concordância (“Como podemos te chamar?”, “alguém da área”, “pessoas conhecidas”). Os nomes dos tipos RIASEC concordam com “perfil” (Investigativo, Artístico, Empreendedor).
 
 ## Como o site funciona
 
@@ -51,5 +52,4 @@ Atenção: se mudar a quantidade de itens em `ITEMS`, `PAIRS` ou `REFL`, as resp
 
 ## Pendências conhecidas
 
-- O texto está no feminino porque foi escrito para uma pessoa só: "Como você quer ser chamada?", "sentada", "concentrada", "dona", "contratada", "orgulhosa" e os rótulos em `DIMS`. Para o público em geral, deixe a linguagem neutra.
 - Não há contador de visitas nem coleta de resultados. Se forem adicionados, avise as pessoas sobre os dados (LGPD).
