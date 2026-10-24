@@ -97,7 +97,10 @@ p{margin:0}
 .bar b{display:block;height:100%;background:var(--accent);transition:width .25s ease}
 
 /* Estrutura */
-.wrap{max-width:600px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:18px 56px;display:flex;flex-direction:column;gap:18px}
+.wrap{max-width:600px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:18px 28px;display:flex;flex-direction:column;gap:18px}
+.foot{max-width:600px;margin:0 auto;padding:0 16px calc(28px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;font-size:14px}
+.foot a,.small a,.note a{color:var(--muted);font-weight:700;text-underline-offset:3px}
+.foot a:hover,.small a:hover,.note a:hover{color:var(--ink)}
 .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:22px 20px;display:flex;flex-direction:column;gap:16px;min-width:0}
 .enter{animation:rise .28s ease-out}
 @keyframes rise{from{transform:translateY(10px)}to{transform:none}}
@@ -233,7 +236,7 @@ details.mini[open]>summary::after{content:"\2212"}
   :root:root:root{--bg:#fff;--paper:#fff;--ink:#15241E;--muted:#56675E;--line:#C9D5CB;--accent:#1D6A4F;--accent-ink:#F6FBF8;--accent-soft:#D9EADF;--marker:#D5960A;--marker-soft:#F7E6B8;--marker-ink:#3D2A00;--warn:#8A5200;--warn-soft:#FBEBCB;--contour:rgba(29,106,79,.17);--t-R:#A65A2A;--t-I:#2C5D9C;--t-A:#A93C83;--t-S:#2A8664;--t-E:#B07804;--t-C:#5A55A0;--shadow:none;color-scheme:light}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   body{background:#fff;font-size:12pt}
-  body::before,.top,.toast,.btn,.link,.pick,.nav,.noprint,#sharesec{display:none!important}
+  body::before,.top,.toast,.btn,.link,.pick,.nav,.noprint,.foot,#sharesec{display:none!important}
   .wrap{max-width:none;padding:0;gap:12px}
   .card,.hero,.path,.week,.mx{box-shadow:none}
   .path,.week,.mx,.type,.brow,.qa div,.verdict{break-inside:avoid}
@@ -251,6 +254,7 @@ details.mini[open]>summary::after{content:"\2212"}
 <body>
 <header class="top"><div class="top-in" id="top"></div></header>
 <main class="wrap" id="app"></main>
+<footer class="foot"><a href="sobre.html">Sobre o teste</a><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos de uso</a></footer>
 <noscript><p style="padding:16px">Ative o JavaScript para fazer o teste.</p></noscript>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
@@ -562,7 +566,7 @@ function renderIntro(){
       ? `<button class="btn wide" data-a="resume">${S.last === "res" ? "Ver meu resultado" : "Continuar de onde parei"}</button>
          <button class="btn ghost wide" data-a="restart" id="restart">Começar do zero</button>`
       : `<button class="btn wide" data-a="start">Começar</button>`}
-    <p class="small">Suas respostas ficam salvas só neste aparelho.</p>
+    <p class="small">Uma ferramenta de autoconhecimento, não um teste psicológico. Suas respostas ficam salvas só neste aparelho, e nem nós temos acesso a elas. <a href="privacidade.html">Privacidade</a></p>
   </section>`;
   drawTopo(document.getElementById("topo"), false);
 }
@@ -909,7 +913,7 @@ function renderRes(){
     <p class="small noprint">Cole no WhatsApp para conversar com alguém, ou numa conversa com o Claude para aprofundar a análise.</p>
     <p class="small print-only">Resultado de ${esc(S.name || "quem fez o teste")} em ${new Date().toLocaleDateString("pt-BR")} · Qual é o meu rumo? · ${esc(siteUrl())}</p>
     <div class="nav"><button class="link" data-a="review">Revisar respostas</button><button class="link" data-a="redo" id="redo">Refazer do zero</button></div>
-    <p class="note">Isto não é um diagnóstico. É um ponto de partida baseado no modelo de interesses de Holland e em métodos de design de vida. Se quiser ir mais fundo, vale buscar orientação profissional com acompanhamento psicológico.</p>
+    <p class="note">Isto não é um teste psicológico nem um diagnóstico. É um ponto de partida para se conhecer, baseado no modelo de interesses de Holland e em métodos de design de vida. Se quiser ir mais fundo, procure orientação de carreira com profissionais de psicologia. <a href="sobre.html">Saiba como o teste funciona</a></p>
   </section>`;
   const wa = document.getElementById("wa"); if(wa) wa.href = "https://wa.me/?text=" + encodeURIComponent(summaryText(true) + "\n\nFaça o teste também: " + location.href.split("#")[0]);
   drawTopo(document.getElementById("topo"), true);
